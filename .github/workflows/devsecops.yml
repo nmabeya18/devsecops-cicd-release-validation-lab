@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  issues: write
 
 jobs:
   validate-build-test:
@@ -64,29 +65,14 @@ jobs:
         run: |
           docker run -d --name devsecops-zap-target -p 5001:5001 devsecops-pipeline-lab:zap
           sleep 5
+          curl --fail http://127.0.0.1:5001/health
 
       - name: Run OWASP ZAP baseline scan
-        run: |
-          docker run --network host \
-            -v ${{ github.workspace }}:/zap/wrk/:rw \
-            -t ghcr.io/zaproxy/zaproxy:stable \
-            zap-baseline.py \
-            -t http://127.0.0.1:5001 \
-            -r zap-report.html || true
-
-      - name: List generated ZAP files
-        if: always()
-        run: |
-          ls -la ${{ github.workspace }}
-          find ${{ github.workspace }} -maxdepth 2 -type f -name "*zap*" -print
-
-      - name: Upload ZAP report
-        if: always()
-        uses: actions/upload-artifact@v4
+        uses: zaproxy/action-baseline@v0.15.0
         with:
-          name: zap-baseline-report
-          path: ${{ github.workspace }}/zap-report.html
-          if-no-files-found: error
+          target: "http://127.0.0.1:5001"
+          allow_issue_writing: false
+          cmd_options: "-I"
 
       - name: Stop application container
         if: always()
