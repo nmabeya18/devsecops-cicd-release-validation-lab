@@ -72,7 +72,13 @@ jobs:
             -t ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
             -t http://127.0.0.1:5001 \
-            -r /zap/wrk/zap-report.html || true
+            -r zap-report.html || true
+
+      - name: List generated ZAP files
+        if: always()
+        run: |
+          ls -la ${{ github.workspace }}
+          find ${{ github.workspace }} -maxdepth 2 -type f -name "*zap*" -print
 
       - name: Upload ZAP report
         if: always()
@@ -80,7 +86,7 @@ jobs:
         with:
           name: zap-baseline-report
           path: ${{ github.workspace }}/zap-report.html
-          if-no-files-found: warn
+          if-no-files-found: error
 
       - name: Stop application container
         if: always()
