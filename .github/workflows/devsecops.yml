@@ -47,3 +47,41 @@ jobs:
       - name: Stop application container
         if: always()
         run: docker stop devsecops-lab || true
+
+  zap-baseline-scan:
+    name: OWASP ZAP Baseline DAST
+    runs-on: ubuntu-latest
+    needs: validate-build-test
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t devsecops-pipeline-lab:zap .
+
+      - name: Start application container
+        run: |
+          docker run -d --name devsecops-zap-target -p 5001:5001 devsecops-pipeline-lab:zap
+          sleep 5
+
+      - name: Run OWASP ZAP baseline scan
+        run: |
+          docker run --network host \
+            -v ${{ github.workspace }}:/zap/wrk/:rw \
+            -t ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py \
+            -t http://127.0.0.1:5001 \
+            -r zap-report.html || true
+
+      - name: Upload ZAP report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-baseline-report
+          path: zap-report.html
+          if-no-files-found: warn
+
+      - name: Stop application container
+        if: always()
+        run: docker stop devsecops-zap-target || true
