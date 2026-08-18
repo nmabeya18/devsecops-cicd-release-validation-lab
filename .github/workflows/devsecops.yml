@@ -1,0 +1,49 @@
+name: DevSecOps CI and Release Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-build-test:
+    name: Validate, Build, and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Validate Python syntax
+        run: python -m py_compile app.py
+
+      - name: Build Docker image
+        run: docker build -t devsecops-pipeline-lab:${{ github.sha }} .
+
+      - name: Start application container
+        run: |
+          docker run -d --name devsecops-lab -p 5001:5001 devsecops-pipeline-lab:${{ github.sha }}
+          sleep 5
+
+      - name: Validate health endpoint
+        run: curl --fail http://127.0.0.1:5001/health
+
+      - name: Show container logs
+        if: always()
+        run: docker logs devsecops-lab || true
+
+      - name: Stop application container
+        if: always()
+        run: docker stop devsecops-lab || true
