@@ -23,6 +23,8 @@ def add_security_headers(response):
     )
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Cache-Control"] = "no-store"
+    response.headers["Pragma"] = "no-cache"
 
     response.headers.pop("Server", None)
     response.headers.pop("X-Powered-By", None)
