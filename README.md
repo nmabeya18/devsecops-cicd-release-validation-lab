@@ -93,11 +93,9 @@ The container uses Gunicorn to serve the Flask application rather than Flask's b
 ### Clone the repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/devsecops-pipeline-lab.git
+git clone https://github.com/nmabeya18/devsecops-pipeline-lab.git
 cd devsecops-pipeline-lab
 ```
-
-Replace `YOUR-USERNAME` with your GitHub username.
 
 ### Build the Docker image
 
@@ -246,4 +244,4 @@ Nivea Mabeya
 Aspiring Cybersecurity / DevSecOps Professional  
 Dallas-Fort Worth, Texas
 
-[LinkedIn]([https://www.linkedin.com/in/YOUR-LINKEDIN-USERNAME/](https://www.linkedin.com/in/nivea-mabeya-429242251)) · [GitHub]([https://github.com/YOUR-GITHUB-USERNAME](https://github.com/nmabeya18))
+[LinkedIn][https://www.linkedin.com/in/YOUR-LINKEDIN-USERNAME/](https://www.linkedin.com/in/nivea-mabeya-429242251) · [GitHub][https://github.com/YOUR-GITHUB-USERNAME](https://github.com/nmabeya18)
