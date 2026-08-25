@@ -244,4 +244,4 @@ Nivea Mabeya
 Aspiring Cybersecurity / DevSecOps Professional  
 Dallas-Fort Worth, Texas
 
-[LinkedIn][https://www.linkedin.com/in/YOUR-LINKEDIN-USERNAME/](https://www.linkedin.com/in/nivea-mabeya-429242251) · [GitHub][https://github.com/YOUR-GITHUB-USERNAME](https://github.com/nmabeya18)
+(https://www.linkedin.com/in/nivea-mabeya-429242251) · (https://github.com/nmabeya18)
